@@ -6,14 +6,16 @@ It is designed for console-based workflows on Linux (tested on Debian 12).
 ## Tools
 
 - **collector**  
-  Parses an HTML file, extracts all `<a href="...">` links, and outputs only clean URL presentation in http or https.
+  - accepts and reads a raw HTML file
+  - extracts all `<a href="...">` links
+  - and outputs clean URL in http or https format
 
 - **group**  
   - Reads URLs from stdin
   - groups them by domain
-  - removes duplicates, 
+  - removes duplicates 
   - and writes each multi-URL domain into its own file
-    inside a `clean/` folder. Files are appended to across runs.
+    inside a `clean/` folder. (appends to across runs)
 
 
 ## Build
