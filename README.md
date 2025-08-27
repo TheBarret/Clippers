@@ -56,4 +56,16 @@ make
 [*] Harvest complete.
 ```
 
-Results will be stored in the `clean` folder locally created.
+Remark: `Harvest` will retain the file structure and save all data locally.
+
+## License
+
+Clippers is released under the **GPL-3.0 License**.  
+
+## Disclaimer
+
+These tools are intended for **legal and ethical use only**.  
+The authors are not responsible for any misuse.  
+Users are fully responsible for complying with laws, regulations, and terms of service when using Clippers.  
+While the software is open-source and freely available for the public,
+it is provided **as-is** for research, educational, and legitimate website service management purposes.
