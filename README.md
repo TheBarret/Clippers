@@ -1,6 +1,6 @@
 # Clippers
 
-Clippers is a lightweight **C++ toolset** tool for collecting URLs out of raw html bulk data in file format.
+Clippers is a lightweight tool for extracting and sorting URLs out of raw html bulk data in file format.
 It is designed for console-based workflows on Linux (tested on Debian 12).
 
 ## Tools
