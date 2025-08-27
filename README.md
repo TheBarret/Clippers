@@ -8,14 +8,14 @@ It is designed for console-based workflows on Linux (tested on Debian 12).
 - **collector**  
   - accepts and reads a raw HTML file
   - extracts all `<a href="...">` links
-  - and outputs clean URL in http or https format
+  - outputs clean URL in http or https format
 
 - **group**  
   - Reads URLs from stdin
   - groups them by domain
   - removes duplicates 
-  - and writes each multi-URL domain into its own file
-    inside a `clean/` folder. (appends to across runs)
+  - writes each multi-URL domain into its own file
+    (output folder `clean`, will only append data)
 
 - **harvest**
   - runs `HEAD` requests on all data
