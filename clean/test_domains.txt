@@ -1,0 +1,8 @@
+https://example.com
+https://github.com
+https://google.com
+https://httpbin.org/delay/1
+https://httpbin.org/status/200
+https://httpbin.org/status/301
+https://httpbin.org/status/302
+https://stackoverflow.com

@@ -1,75 +1,237 @@
-# Clippers
+# Harvest v2.0 - Enhanced URL Validation Tool
 
-Clippers is a lightweight tool for extracting and sorting URLs out of raw html bulk data in file format.
-It is designed for console-based workflows on Linux (tested on Debian 12).
+A robust, rate-limited URL validation tool that checks the presence of URLs using HEAD requests while being respectful to both local and remote systems.
 
-## Tools
+## 🚀 Key Improvements in v2.0
 
-- **collector**  
-  - accepts and reads a raw HTML file
-  - extracts all `<a href="...">` http or https format links
-  - outputs clean URL to stdout
+### Rate Limiting & Flood Protection
+- **Host-based rate limiting**: Prevents flooding specific hosts
+- **Configurable delays**: Adjustable minimum and maximum delays between requests
+- **Adaptive timing**: Automatically adjusts delays based on response success/failure
+- **Exponential backoff**: Intelligent retry logic with increasing delays
 
-- **group**  
-  - Reads URLs from stdin
-  - groups them by domain
-  - removes duplicates 
-  - writes each multi-URL domain into its own file
-    (output folder `clean`, will only append data)
+### Performance & Robustness
+- **Connection pooling**: Reuses CURL handles for better performance
+- **Concurrent connection control**: Configurable maximum concurrent connections
+- **Better error handling**: Comprehensive retry logic and error reporting
+- **Progress tracking**: Real-time progress bar and statistics
 
-- **harvest**
-  - runs `HEAD` requests on all data
-  - updates files generated from `group` data
+### System Protection
+- **Resource management**: Prevents overwhelming local system resources
+- **Remote server protection**: Respects server capabilities and rate limits
+- **Configurable timeouts**: Adjustable connection and request timeouts
+- **SSL handling**: Configurable SSL verification options
 
+## 📋 Requirements
 
-## Build
-Install dependencies:
+- C++17 compatible compiler (GCC 7+, Clang 5+, MSVC 2017+)
+- libcurl development libraries
+- POSIX-compliant system (Linux, macOS, BSD)
+
+## 🛠️ Installation
+
+### 1. Install Dependencies
+
+**Ubuntu/Debian:**
 ```bash
-sudo apt update
-sudo apt install g++ libgumbo-dev libcurl4-openssl-dev -y
-mkdir clean
-make
+sudo apt-get update
+sudo apt-get install -y libcurl4-openssl-dev build-essential
 ```
-## Usage
+
+**CentOS/RHEL/Fedora:**
 ```bash
-./collector sample.htm | ./group
+sudo yum install -y libcurl-devel gcc-c++ make
+# or for newer versions:
+sudo dnf install -y libcurl-devel gcc-c++ make
+```
+
+**Arch Linux:**
+```bash
+sudo pacman -S --needed curl base-devel
+```
+
+### 2. Build the Application
+
+```bash
+make
+# or for optimized release build:
+make release
+```
+
+### 3. Install (Optional)
+
+```bash
+sudo make install
+```
+
+## ⚙️ Configuration
+
+The application can be configured through the `harvest.conf` file. Key settings include:
+
+```ini
+# Rate Limiting
+min_delay_ms=100          # Minimum delay between requests (ms)
+max_delay_ms=2000         # Maximum delay between requests (ms)
+
+# Timeouts
+timeout_seconds=10        # Request timeout
+connect_timeout=5         # Connection timeout
+
+# Retry Logic
+max_retries=3             # Maximum retry attempts
+backoff_multiplier=2      # Exponential backoff multiplier
+
+# Connection Pool
+max_concurrent=5          # Maximum concurrent connections
+```
+
+## 🚀 Usage
+
+### Basic Usage
+
+```bash
+# Run with default settings
+./harvest
+
+# Run with custom configuration
+./harvest --config harvest.conf
+
+# Check dependencies
+make check-deps
+```
+
+### Directory Structure
+
+The application expects a `clean/` directory containing text files with URLs (one per line):
+
+```
+clean/
+├── domains1.txt
+├── domains2.txt
+└── domains3.txt
+```
+
+### Output
+
+The application provides:
+- Real-time progress bar
+- Per-file validation results
+- Comprehensive statistics
+- Atomic file updates (using temporary files)
+
+## 📊 Features
+
+### Rate Limiting
+- **Host-based**: Each host gets its own rate limit
+- **Configurable**: Adjust delays via configuration file
+- **Adaptive**: Increases delays for failed requests
+
+### Connection Management
+- **Pooling**: Reuses CURL handles efficiently
+- **Concurrency control**: Prevents resource exhaustion
+- **Timeout handling**: Configurable connection and request timeouts
+
+### Error Handling
+- **Retry logic**: Automatic retry with exponential backoff
+- **Graceful degradation**: Continues processing on individual failures
+- **Comprehensive logging**: Detailed error reporting
+
+### Progress Tracking
+- **Real-time updates**: Live progress bar
+- **Statistics**: Request counts, success rates, timing
+- **File-level reporting**: Per-file validation results
+
+## 🔧 Advanced Configuration
+
+### Host-Specific Rate Limiting
+
+Add host-specific delays in `harvest.conf`:
+
+```ini
+# Custom delays for specific hosts
+example.com=500
+api.github.com=1000
+cdn.example.com=200
+```
+
+### SSL Configuration
+
+```ini
+# SSL verification settings
+ssl_verify_peer=0         # Disable peer verification
+ssl_verify_host=0         # Disable hostname verification
+```
+
+### Logging Options
+
+```ini
+# Logging configuration
+log_level=2               # Verbose logging
+log_file=harvest.log      # Log to file
+```
+
+## 📈 Performance Tuning
+
+### For High-Volume Processing
+
+```ini
+# Aggressive settings (use with caution)
+min_delay_ms=50
+max_concurrent=10
+timeout_seconds=5
+max_retries=2
+```
+
+### For Conservative Processing
+
+```ini
+# Conservative settings (respectful to servers)
+min_delay_ms=500
+max_concurrent=3
+timeout_seconds=15
+max_retries=5
+```
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+1. **libcurl not found**: Install development libraries
+2. **Compilation errors**: Ensure C++17 support
+3. **Permission denied**: Check directory permissions
+4. **Rate limiting**: Adjust delays in configuration
+
+### Debug Mode
+
+```bash
+make debug
 ./harvest
 ```
 
-## Dry run
-```
-@atx:~/Clipper$ ./collector sample.htm | ./group
-@atx:~/Clipper$ ./harvest
-[*] Processing file: clean/google.com.txt
-  -> Checking: https://google.com/search?utm_source=googlemenu&fg=1 ... OK (200)
-  -> Checking: https://google.com/search?utm_source=google&hl=en-VI&fg=1 ... OK (200)
-[*] Updating file: clean/myactivity.google.com.txt (2 valid URLs)
-[*] Processing file: clean/policies.google.com.txt
-  -> Checking: https://policies.google.com/privacy?hl=en-VI&fg=1 ... OK (200)
-  -> Checking: https://policies.google.com/terms?hl=en-VI&fg=1 ... OK (200)
-[*] Updating file: clean/policies.google.com.txt (2 valid URLs)
-[*] Processing file: clean/www.google.com.txt
-  -> Checking: https://www.google.com/advanced_search?hl=en-VI&fg=1 ... OK (200)
-  -> Checking: https://www.google.com/imghp?hl=en&authuser=0&ogbl ... OK (200)
-  -> Checking: https://www.google.com/intl/en_vi/ads/?subid=ww-ww-et-g-awa-a-g_hpafoot1_1!o2&utm_source=google.com&utm_medium=referral&utm_campaign=google_hpafooter&fg=1 ... OK (200)
-  -> Checking: https://www.google.com/preferences?hl=en-VI&fg=1 ... OK (200)
-  -> Checking: https://www.google.com/services/?subid=ww-ww-et-g-awa-a-g_hpbfoot1_1!o2&utm_source=google.com&utm_medium=referral&utm_campaign=google_hpbfooter&fg=1 ... OK (200)
-[*] Updating file: clean/www.google.com.txt (5 valid URLs)
-[*] Harvest complete.
+### Dependency Check
+
+```bash
+make check-deps
 ```
 
-Remark: `Harvest` will retain the file structure and save all data locally.
+## 📝 License
 
-## License
+This project is part of the Clippers toolset for URL processing and validation.
 
-- Clippers is released under the **GPL-3.0 License**.  
-- libgumbo - License: Apache-2.0 - https://github.com/google/gumbo-parser
-- libcurl4 - License: https://curl.se/docs/copyright.html
+## 🤝 Contributing
 
-## Disclaimer
+To contribute improvements:
 
-These tools are intended for **legal and ethical use only**.  
-The authors are not responsible for any misuse.  
-Users are fully responsible for complying with laws, regulations, and terms of service when using Clippers.  
-While the software is open-source and freely available for the public,
-it is provided **as-is** for research, educational, and legitimate website service management purposes.
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
+
+## 📞 Support
+
+For issues and questions:
+- Check the troubleshooting section
+- Review configuration options
+- Ensure all dependencies are installed
+- Test with debug build for detailed output
