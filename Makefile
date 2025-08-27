@@ -1,17 +1,21 @@
 # Clippers - Simple C++ URL extraction & grouping toolset
 CXX      := g++
 CXXFLAGS := -Wall -O2 -std=c++17
-LDFLAGS  := -lgumbo
+LDFLAGS1 := -lgumbo
+LDFLAGS2 := -lcurl
 
-TARGETS  := collector group
+TARGETS  := collector group harvest
 
 all: $(TARGETS)
 
 collector: collector.cpp
-	$(CXX) $(CXXFLAGS) -o $@ $< $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) -o $@ $< $(LDFLAGS1)
 
 group: group.cpp
-	$(CXX) $(CXXFLAGS) $< -o $@
+	$(CXX) $(CXXFLAGS) -o $@ $<
+
+harvest: harvest.cpp
+	$(CXX) $(CXXFLAGS) -o $@ $< $(LDFLAGS2)
 
 clean:
 	rm -f $(TARGETS)
