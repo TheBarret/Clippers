@@ -40,7 +40,7 @@ make
 ```
 @atx:~/Clipper$ ./collector sample.htm | ./group
 @atx:~/Clipper$ ./harvest
-[*] Processing file: clean/myactivity.google.com.txt
+[*] Processing file: clean/google.com.txt
   -> Checking: https://google.com/search?utm_source=googlemenu&fg=1 ... OK (200)
   -> Checking: https://google.com/search?utm_source=google&hl=en-VI&fg=1 ... OK (200)
 [*] Updating file: clean/myactivity.google.com.txt (2 valid URLs)
