@@ -7,8 +7,8 @@ It is designed for console-based workflows on Linux (tested on Debian 12).
 
 - **collector**  
   - accepts and reads a raw HTML file
-  - extracts all `<a href="...">` links
-  - outputs clean URL in http or https format
+  - extracts all `<a href="...">` http or https format links
+  - outputs clean URL to stdout
 
 - **group**  
   - Reads URLs from stdin
