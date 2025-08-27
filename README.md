@@ -1,6 +1,6 @@
 # Clippers
 
-Clippers is a lightweight **C++ toolset** for collecting URLs out of raw html bulk data in file format.
+Clippers is a lightweight **C++ toolset** tool for collecting URLs out of raw html bulk data in file format.
 It is designed for console-based workflows on Linux (tested on Debian 12).
 
 ## Tools
@@ -12,9 +12,17 @@ It is designed for console-based workflows on Linux (tested on Debian 12).
   Reads URLs from stdin, groups them by domain, removes duplicates, 
   and writes each multi-URL domain into its own file inside a `clean/` folder. Files are appended to across runs.
 
-## Build
 
+## Build
 Install dependencies:
 ```bash
 sudo apt update
 sudo apt install g++ libgumbo-dev -y
+make
+```
+## Usage
+```bash
+./collector sample.htm | ./group
+```
+
+Results will be stored in the `clean` folder locally created.
