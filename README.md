@@ -64,6 +64,9 @@ Remark: `Harvest` will retain the file structure and save all data locally.
 
 Clippers is released under the **GPL-3.0 License**.  
 
+libgumbo - License: Apache-2.0 - https://github.com/google/gumbo-parser
+libcurl4 - License: https://curl.se/docs/copyright.html
+
 ## Disclaimer
 
 These tools are intended for **legal and ethical use only**.  
