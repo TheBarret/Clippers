@@ -19,6 +19,8 @@ It is designed for console-based workflows on Linux (tested on Debian 12).
 
 - **harvest**
   - runs `HEAD` requests on all data
+  - updates files generated from `group` data
+
 
 ## Build
 Install dependencies:
